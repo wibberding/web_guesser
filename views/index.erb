@@ -12,12 +12,13 @@
       <input type='submit' value='Guess!' />
     </form>
 
-    <% if message != "You got it right!" %>
+    <% if message == "You got it right!" %>
     <p>
       The SECRET NUMBER is <%= number %>
     </p>
     <% end %>
 
     <p><%= message %></p>
+    <p>Guess left: <%=guesses%></p>
   </body>
 </html>

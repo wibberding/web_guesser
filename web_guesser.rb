@@ -3,15 +3,15 @@ require 'sinatra/reloader'
 
 
 #Declared here so it doesn't change on refresh.
-SECRET_NUMBER = rand(101) # 101 to include 100.
+SECRET_NUMBER = rand(101) # 101 to include the number 100.
+@@guesses_left = 5
 
 
 get '/' do
   guess = params["guess"].to_i
   message = check_guess(guess)
-  background_color = change_color(guess, SECRET_NUMBER)
-
-  erb :index, :locals => {:number => SECRET_NUMBER.to_s, :message => message, :background_color => background_color}
+  background_color = change_color(guess, SECRET_NUMBER) # intentional dependency injection. Is this the 'right way' to make the code clear, or is it better to just reference the constant directly like check_guess()? Perhaps referencing a constant is okay since you don't change it and there are no side effects??
+  erb :index, :locals => {:number => SECRET_NUMBER.to_s, :message => message, :background_color => background_color, :guesses => @@guesses_left}
 
 end
 
