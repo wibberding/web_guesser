@@ -3,34 +3,44 @@ require 'sinatra/reloader'
 
 
 #Declared here so it doesn't change on refresh.
-SECRET_NUMBER = rand(101) # 101 to include the number 100.
+@@secret_number = rand(101) # 101 to include the number 100.
 @@guesses_left = 5
 
 
 get '/' do
-  guess = params["guess"].to_i
+  guess = params["guess"]
+  @@guesses_left -= 1 if guess !=""  #counts guesses and avoids changing on blank input.
   message = check_guess(guess)
-  background_color = change_color(guess, SECRET_NUMBER) # intentional dependency injection. Is this the 'right way' to make the code clear, or is it better to just reference the constant directly like check_guess()? Perhaps referencing a constant is okay since you don't change it and there are no side effects??
-  erb :index, :locals => {:number => SECRET_NUMBER.to_s, :message => message, :background_color => background_color, :guesses => @@guesses_left}
+
+  if @@guesses_left <= 0 
+    message = "You lost. I new number has been generated."
+    reset()
+  end
+
+  background_color = change_color(guess, @@secret_number) # intentional dependency injection. Is this the 'right way' to make the code clear, or is it better to just reference the class variable directly like check_guess()? Perhaps referencing a class variable is okay since you don't change it and there are no side effects??
+  erb :index, :locals => {:number => @@secret_number.to_s, :message => message, :background_color => background_color, :guesses => @@guesses_left}
 
 end
 
 def check_guess(guess)
-  if (guess - SECRET_NUMBER) > 5
+  guess = guess.to_i
+  if (guess - @@secret_number) > 5
     message = "Way too high!"
-  elsif (SECRET_NUMBER - guess) > 5
+  elsif (@@secret_number - guess) > 5
     message = "Way too low!"
-  elsif guess > SECRET_NUMBER
+  elsif guess > @@secret_number
     message = "Too high!"
-  elsif guess < SECRET_NUMBER
+  elsif guess < @@secret_number
     message = "Too low!"
   else
-    message = "You got it right!"
+    message = "You got it right! A new number has been generated"
+    reset()
   end
   message
 end
 
 def change_color(guess, number) 
+  guess = guess.to_i
   spread = (guess - number).abs
   if spread == 0
     return "green"
@@ -45,4 +55,10 @@ def change_color(guess, number)
   color_number.to_s
 
   return "#f#{color_number}#{color_number}"
+end
+
+def reset()
+  @@guesses_left = 5
+  new_number = rand(101)
+  @@secret_number = new_number
 end
