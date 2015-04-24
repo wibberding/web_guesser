@@ -7,15 +7,19 @@
     </style>
   </head>
   <body>
+
+    <h2>Guess a Number Game</h2>
     <form>
       <input type='text' name='guess' />
       <input type='submit' value='Guess!' />
     </form>
 
-    <% if message == "You got it right!" %>
-    <p>
-      The SECRET NUMBER is <%= number %>
-    </p>
+    <% if number == guess %>
+      <p>The SECRET NUMBER is <%= number %></p>
+    <% end %>
+
+    <% if cheat == 'true' %>
+      <p>Hint: The SECRET NUMBER is <%= number %></p>
     <% end %>
 
     <p><%= message %></p>
