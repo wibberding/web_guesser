@@ -4,7 +4,7 @@ require 'sinatra/reloader'
 
 #Class variables.
 @@secret_number = rand(101) # 101 to include the number 100.
-@@guesses_left = 5 +1 # "1" is to account for first page load.
+@@guesses_left = 5 + 1 # "1" is to account for first page load.
 
 
 get '/' do
