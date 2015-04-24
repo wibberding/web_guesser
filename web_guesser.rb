@@ -2,7 +2,7 @@ require 'sinatra'
 require 'sinatra/reloader'
 
 
-#Declared here so it doesn't change on refresh.
+#Class variables.
 @@secret_number = rand(101) # 101 to include the number 100.
 @@guesses_left = 5 +1 # "1" is to account for first page load.
 
